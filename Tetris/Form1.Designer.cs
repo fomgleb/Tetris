@@ -35,7 +35,7 @@
             // timer1
             // 
             this.timer1.Enabled = true;
-            this.timer1.Interval = 300;
+            this.timer1.Interval = 1000;
             // 
             // Form1
             // 
