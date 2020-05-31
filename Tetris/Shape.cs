@@ -103,9 +103,9 @@ namespace Tetris
             }
         }
 
-        public void Rotate(string direction)
+        public void Rotate()
         {
-
+            
         }
 
         public void MoveDown()
