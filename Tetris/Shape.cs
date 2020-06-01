@@ -9,15 +9,17 @@ namespace Tetris
     class Shape
     {
         public int X { get; private set; }
-        public int Y { get; private set; }
+        public int Y { get; private set; } // координаты нахождения начала матрицы фигуры на главной матрице 
         public int MatrixWidth { get; private set; } // ширина матрицы
         public int MatrixHeight { get; private set; } // высота матрицы
+        public int ShapeNumber { get; private set; } // выбраная фигура
         public int[,] Matrix { get; set; }
 
         public Shape(int x, int y, int shapeNumber)
         {
             X = x;
             Y = y;
+            ShapeNumber = shapeNumber;
             GenerateShape(shapeNumber);
         }
 
@@ -105,6 +107,38 @@ namespace Tetris
 
         public void Rotate()
         {
+            //switch (ShapeNumber)
+            //{
+            //    case 1:
+            //        ShapeNumber = 101;
+            //        Matrix = new int[4, 4]
+            //        {
+            //            {0,1,0,0},
+            //            {0,1,0,0},
+            //            {0,1,0,0},
+            //            {0,1,0,0}
+            //        };
+            //        break;
+            //    case 101:
+            //        ShapeNumber = 1;
+            //        Matrix = new int[4, 4]
+            //        {
+            //            {0,0,0,0},
+            //            {1,1,1,1},
+            //            {0,0,0,0},
+            //            {0,0,0,0}
+            //        };
+            //        break;
+            //}
+
+            int[,] tempMatrix = new int[MatrixWidth, MatrixHeight];
+            for (int i = 0; i < MatrixWidth; i++)
+                for (int j = 0; j < MatrixHeight; j++)
+                {
+                    tempMatrix[i, j] = Matrix[j, MatrixHeight - 1 - i];
+                }
+            Matrix = tempMatrix;
+
             
         }
 

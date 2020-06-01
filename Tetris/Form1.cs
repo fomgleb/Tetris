@@ -78,20 +78,14 @@ namespace Tetris
                     {
                         if (y + 1 == matrixHeight)
                             return true;
-                        try
-                        {
-                            if (matrix[y + 1, x] != 0 && currentShape.Matrix[y - currentShape.Y + 1, x - currentShape.X] == 0)
-                                return true;
-                        }
-                        catch (Exception)
-                        {
+
+                        if (matrix[y + 1, x] != 0 && (y - currentShape.Y + 1 >= currentShape.MatrixHeight || currentShape.Matrix[y - currentShape.Y + 1, x - currentShape.X] == 0))
                             return true;
-                        }
                     }
             return false;
         }
 
-        private bool HorizontalCollide(int dir)
+        private bool HorizontalCollide(int dir) // возвращает true, если справа(dir == 1) или слева(dir == -1) есть другая фиругра или конец карты
         {
             for (int y = currentShape.Y; y < currentShape.Y + currentShape.MatrixHeight; y++)
                 for (int x = currentShape.X; x < currentShape.X + currentShape.MatrixWidth; x++)
@@ -107,6 +101,32 @@ namespace Tetris
                         }
                     }
             return false;
+        }
+
+        private bool Overlay(Shape shape) // возвращает true, если находит наложение на другие фигуры
+        {                
+            for (int i = 0; i < shape.MatrixWidth; i++)
+                for (int j = 0; j < shape.MatrixHeight; j++)
+                    if (shape.Matrix[j, i] != 0) // проверяем только фигуру, а не пространство вокруг неё
+                    {
+                        if (j + shape.Y >= matrixHeight || i + shape.X >= matrixWidth || i + shape.X <= -1) // проверяет за картой ли фигура
+                            return true;
+
+                        if (matrix[j + shape.Y, i + shape.X] != 0) // проверка наложения на другую фигуру
+                            return true;
+                    }
+            return false;   
+        }
+
+        private void DeleteFullRow()
+        {
+            int saveMatrixHeight;
+
+            for (int i = 0; i < matrixHeight; i++)
+                for (int j = 0; j < matrixWidth; j++)
+                {
+                    saveMatrixHeight= j;
+                }
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e) // реагирует на нажатия клавиш
@@ -129,6 +149,17 @@ namespace Tetris
                     if (!VerticalCollide())
                         currentShape.MoveDown();
                     break;
+
+                case Keys.Up:
+                    RemoveShape();
+                    Shape tempShape = new Shape(currentShape.X, currentShape.Y, currentShape.ShapeNumber);
+
+                    tempShape.Matrix = currentShape.Matrix;
+                    tempShape.Rotate();
+
+                    if (!Overlay(tempShape))
+                        currentShape.Rotate();
+                    break;
             }
             Merge();
             Invalidate();
@@ -142,7 +173,6 @@ namespace Tetris
 
         private void timer_Tick(object sender, EventArgs e) // происходит при тике таймера
         {
-
             if (VerticalCollide())
             {
                 currentShape = new Shape(4, 0, new Random().Next(1,8));
