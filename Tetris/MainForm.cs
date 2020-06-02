@@ -98,13 +98,16 @@ namespace Tetris
                             return true;
 
                         if (matrix[x + 1 * dir, y] != 0) // если блоки фигуры соприкасаются с другими блоками справа или слева
-                            if (x - currentShape.X + 1 * dir >= currentShape.MatrixWidth - 1 || x - currentShape.X - 1 * dir < 0) // если проверяемый блок не выходит за рамки матрицы фигуры
-                            {
-                                if (currentShape.Matrix[x - currentShape.X + 1 * dir, y - currentShape.Y] == 0) // если проверяемый блок летящей фигуры не есть самим блоком летящей фигуры
-                                    return true;
-                            }
-                            else
+                        {
+                            if (x - currentShape.X + 1 >= currentShape.MatrixWidth)
                                 return true;
+
+                            if (x - currentShape.X - 1 < 0)
+                                return true;
+
+                            if (currentShape.Matrix[x - currentShape.X + 1 * dir, y - currentShape.Y] == 0)
+                                return true;
+                        }
                     }
             return false;
         }
@@ -124,37 +127,24 @@ namespace Tetris
             return false;   
         }
 
-        private void DeleteFullRow()
+        private void DeleteFullRow() // находит и уберает полные строки при этом сдвигая все верхние строки на 1 вниз
         {
-            int saveMatrixHeight;
-            bool fullRow = false;
-
             for (int y = 0; y < matrixHeight; y++)
             {
                 for (int x = 0; x < matrixWidth; x++)
                 {
-                    if (matrix[x, y] == 0) // если этот блок равняется нулю, то переходим к следующему ряду, так как в этом уже не будет полностью заполненого ряда
-                        break;
-                    else if(x == matrixWidth - 1)
+                    if (matrix[x, y] == 0) // если этот блок равняется нулю
+                        break; // , то переходим к следующему ряду, так как этот уже не будет полностью заполнен
+                    else if(x == matrixWidth - 1) // иначе если это последний блок в ряду
                     {
-                        for (x = 0; x < matrixWidth; x++)
-                        {
+                        for (x = 0; x < matrixWidth; x++) // обнуляем все числа в ряду
                             matrix[x, y] = 0;
-                        }
+
+                        for ( y -= 1; y > -1; y--) // опускаем все блоки над обнуленым рядом на 1
+                            for ( x = 0; x < matrixWidth; x++)
+                                matrix[x, y + 1] = matrix[x, y];
                     }
-
-
                 }
-
-                
-
-                //if (fullRow == true)
-                //{
-                //    for (int k = 0; k < matrixWidth; k++)
-                //        matrix[k, saveMatrixHeight] = 0;
-                //}
-                //else
-                //    saveMatrixHeight = y;
             }
         }
 
