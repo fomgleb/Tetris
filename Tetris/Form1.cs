@@ -7,7 +7,7 @@ namespace Tetris
     public partial class MainForm : Form
     {
         const int blockSize = 25, matrixHeight = 20, matrixWidth = 10; // Размер одной клетки, ширина карты, высота карты
-        public int[,] matrix = new int[matrixHeight, matrixWidth]; // массив циферок, это сама карта
+        public int[,] matrix = new int[matrixWidth, matrixHeight]; // массив циферок, это сама карта
         Shape currentShape = new Shape(6, 0, new Random().Next(1, 8)); // текущая фигура
 
         public MainForm()
@@ -31,55 +31,55 @@ namespace Tetris
 
         private void DrawMap(Graphics graphics)// Рисует карту
         {
-            for (int height = 0; height < matrixHeight; height++)
-                for (int width = 0; width < matrixWidth; width++)
+            for (int x = 0; x < matrixWidth; x++)
+                for (int y = 0; y < matrixHeight; y++)
                 {
-                    if (matrix[height, width] == 1)
-                        graphics.FillRectangle(Brushes.Red, 50 + width * blockSize + 2, 50 + height * blockSize + 2, blockSize - 2, blockSize - 2);
-                    else if (matrix[height, width] == 2)
-                        graphics.FillRectangle(Brushes.Blue, 50 + width * blockSize + 2, 50 + height * blockSize + 2, blockSize - 2, blockSize - 2);
-                    else if (matrix[height, width] == 2)
-                        graphics.FillRectangle(Brushes.Orange, 50 + width * blockSize + 2, 50 + height * blockSize + 2, blockSize - 2, blockSize - 2);
-                    else if (matrix[height, width] == 3)
-                        graphics.FillRectangle(Brushes.Brown, 50 + width * blockSize + 2, 50 + height * blockSize + 2, blockSize - 2, blockSize - 2);
-                    else if (matrix[height, width] == 4)
-                        graphics.FillRectangle(Brushes.Green, 50 + width * blockSize + 2, 50 + height * blockSize + 2, blockSize - 2, blockSize - 2);
-                    else if (matrix[height, width] == 5)
-                        graphics.FillRectangle(Brushes.Purple, 50 + width * blockSize + 2, 50 + height * blockSize + 2, blockSize - 2, blockSize - 2);
-                    else if (matrix[height, width] == 6)
-                        graphics.FillRectangle(Brushes.Black, 50 + width * blockSize + 2, 50 + height * blockSize + 2, blockSize - 2, blockSize - 2);
-                    else if (matrix[height, width] == 7)
-                        graphics.FillRectangle(Brushes.Violet, 50 + width * blockSize + 2, 50 + height * blockSize + 2, blockSize - 2, blockSize - 2);
+                    if (matrix[x, y] == 1)
+                        graphics.FillRectangle(Brushes.Red, 50 + x * blockSize + 2, 50 + y * blockSize + 2, blockSize - 2, blockSize - 2);
+                    else if (matrix[x, y] == 2)
+                        graphics.FillRectangle(Brushes.Blue, 50 + x * blockSize + 2, 50 + y * blockSize + 2, blockSize - 2, blockSize - 2);
+                    else if (matrix[x, y] == 2)
+                        graphics.FillRectangle(Brushes.Orange, 50 + x * blockSize + 2, 50 + y * blockSize + 2, blockSize - 2, blockSize - 2);
+                    else if (matrix[x, y] == 3)
+                        graphics.FillRectangle(Brushes.Brown, 50 + x * blockSize + 2, 50 + y * blockSize + 2, blockSize - 2, blockSize - 2);
+                    else if (matrix[x, y] == 4)
+                        graphics.FillRectangle(Brushes.Green, 50 + x * blockSize + 2, 50 + y * blockSize + 2, blockSize - 2, blockSize - 2);
+                    else if (matrix[x, y] == 5)
+                        graphics.FillRectangle(Brushes.Purple, 50 + x * blockSize + 2, 50 + y * blockSize + 2, blockSize - 2, blockSize - 2);
+                    else if (matrix[x, y] == 6)
+                        graphics.FillRectangle(Brushes.Black, 50 + x * blockSize + 2, 50 + y * blockSize + 2, blockSize - 2, blockSize - 2);
+                    else if (matrix[x, y] == 7)
+                        graphics.FillRectangle(Brushes.Violet, 50 + x * blockSize + 2, 50 + y * blockSize + 2, blockSize - 2, blockSize - 2);
                 }
         }
 
         private void RemoveShape() // удаляет фигуру с главной матрицы
         {
-            for (int i = currentShape.Y; i < currentShape.Y + currentShape.MatrixHeight; i++)
-                for (int j = currentShape.X; j < currentShape.X + currentShape.MatrixWidth; j++)
-                    if (i >= 0 && j >= 0 && i < matrixHeight && j < matrixWidth)
-                        if (currentShape.Matrix[i - currentShape.Y, j - currentShape.X] != 0)
-                            matrix[i, j] = 0;
+            for (int x = currentShape.X; x < currentShape.X + currentShape.MatrixWidth; x++)
+                for (int y = currentShape.Y; y < currentShape.Y + currentShape.MatrixHeight; y++)
+                    if (x >= 0 && y >= 0 && x < matrixWidth && y < matrixHeight)
+                        if (currentShape.Matrix[x - currentShape.X, y - currentShape.Y] != 0)
+                            matrix[x, y] = 0;
         }
 
         private void Merge() // Переносит матрицу фигуры на основную матрицу
         {
-            for (int y = 0; y < currentShape.MatrixHeight; y++)
-                for (int x = 0; x < currentShape.MatrixWidth; x++)
-                    if (currentShape.Matrix[y, x] != 0)
-                        matrix[currentShape.Y + y, currentShape.X + x] = currentShape.Matrix[y, x];
+            for (int x = 0; x < currentShape.MatrixWidth; x++)
+                for (int y = 0; y < currentShape.MatrixHeight; y++)
+                    if (currentShape.Matrix[x, y] != 0)
+                        matrix[currentShape.X + x, currentShape.Y + y] = currentShape.Matrix[x, y];
         }
 
         private bool VerticalCollide() // возвращает true, если снизу фигуры конец карты или другая фигура
         {
-            for (int y = currentShape.Y + currentShape.MatrixHeight - 1; y >= currentShape.Y; y--)
-                for (int x = currentShape.X; x < currentShape.X + currentShape.MatrixWidth; x++)
-                    if (currentShape.Matrix[y - currentShape.Y, x - currentShape.X] != 0)
+            for (int x = currentShape.X; x < currentShape.X + currentShape.MatrixWidth; x++)
+                for (int y = currentShape.Y; y < currentShape.Y + currentShape.MatrixHeight; y++)
+                    if (currentShape.Matrix[x - currentShape.X, y - currentShape.Y] != 0)
                     {
-                        if (y + 1 == matrixHeight)
+                        if (y + 1 >= matrixHeight) // Если следующий y за пределами карты, то true
                             return true;
 
-                        if (matrix[y + 1, x] != 0 && (y - currentShape.Y + 1 >= currentShape.MatrixHeight || currentShape.Matrix[y - currentShape.Y + 1, x - currentShape.X] == 0))
+                        if (matrix[x, y + 1] != 0 && (y - currentShape.Y + 1 >= currentShape.MatrixHeight || currentShape.Matrix[x - currentShape.X, y - currentShape.Y + 1] == 0))
                             return true;
                     }
             return false;
@@ -87,32 +87,33 @@ namespace Tetris
 
         private bool HorizontalCollide(int dir) // возвращает true, если справа(dir == 1) или слева(dir == -1) есть другая фиругра или конец карты
         {
-            for (int y = currentShape.Y; y < currentShape.Y + currentShape.MatrixHeight; y++)
-                for (int x = currentShape.X; x < currentShape.X + currentShape.MatrixWidth; x++)
-                    if (currentShape.Matrix[y - currentShape.Y, x - currentShape.X] != 0)
+            if (currentShape.ShapeNumber == 1)
+                Console.WriteLine();
+
+            for (int x = currentShape.X; x < currentShape.X + currentShape.MatrixWidth; x++)
+                for (int y = currentShape.Y; y < currentShape.Y + currentShape.MatrixHeight; y++)
+                    if (currentShape.Matrix[x - currentShape.X, y - currentShape.Y] != 0)
                     {
-                        if (x + 1 * dir > matrixWidth - 1 || x + 1 * dir < 0)
+                        if (x + 1 * dir > matrixWidth - 1 || x + 1 * dir < 0) // если фигура соприкосается с концом карты
                             return true;
 
-                        if (matrix[y, x + 1 * dir] != 0)
-                        {
-                            if (x - currentShape.X + 1 * dir >= currentShape.MatrixWidth - 1 || currentShape.Matrix[y - currentShape.Y, x - currentShape.X + 1] != 0)
+                        if (matrix[x + 1 * dir, y] != 0) // если фигура соприкосается с другой фигурой справа или слева
+                            if (x - currentShape.X + 1 * dir >= currentShape.MatrixWidth - 1 || currentShape.Matrix[x - currentShape.X + 1, y - currentShape.Y] == 0)
                                 return true;
-                        }
                     }
             return false;
         }
 
         private bool Overlay(Shape shape) // возвращает true, если находит наложение на другие фигуры
         {                
-            for (int i = 0; i < shape.MatrixWidth; i++)
-                for (int j = 0; j < shape.MatrixHeight; j++)
-                    if (shape.Matrix[j, i] != 0) // проверяем только фигуру, а не пространство вокруг неё
+            for (int x = 0; x < shape.MatrixWidth; x++)
+                for (int y = 0; y < shape.MatrixHeight; y++)
+                    if (shape.Matrix[x, y] != 0) // проверяем только фигуру, а не пространство вокруг неё
                     {
-                        if (j + shape.Y >= matrixHeight || i + shape.X >= matrixWidth || i + shape.X <= -1) // проверяет за картой ли фигура
+                        if (y + shape.Y >= matrixHeight || x + shape.X >= matrixWidth || x + shape.X <= -1) // проверяет за картой ли фигура
                             return true;
 
-                        if (matrix[j + shape.Y, i + shape.X] != 0) // проверка наложения на другую фигуру
+                        if (matrix[x + shape.X, y + shape.Y] != 0) // проверка наложения на другую фигуру
                             return true;
                     }
             return false;   
@@ -121,12 +122,29 @@ namespace Tetris
         private void DeleteFullRow()
         {
             int saveMatrixHeight;
+            bool fullRow = false;
 
-            for (int i = 0; i < matrixHeight; i++)
-                for (int j = 0; j < matrixWidth; j++)
+            for (int y = 0; y < matrixHeight; y++)
+            {
+                for (int x = 0; x < matrixWidth; x++)
                 {
-                    saveMatrixHeight= j;
+                    if (matrix[x, y] == 0)
+                    {
+                        fullRow = false;
+                        break;
+                    }
+                    else
+                        fullRow = true;
                 }
+
+                if (fullRow == true)
+                {
+                    for (int k = 0; k < matrixWidth; k++)
+                        matrix[k, y - 1] = 0;
+                }
+                else
+                    saveMatrixHeight = y;
+            }
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e) // реагирует на нажатия клавиш
@@ -183,6 +201,7 @@ namespace Tetris
                 currentShape.MoveDown(); // изменяет координату Y в классе Shape на +1
             }
 
+            DeleteFullRow();
             Merge(); // переноси уже опущеную на один блок фигуру
             Invalidate(); // вызывает перерисовку
         }

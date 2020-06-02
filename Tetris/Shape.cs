@@ -31,10 +31,10 @@ namespace Tetris
                 MatrixHeight = 4;
                 Matrix = new int[4, 4] 
                 {
-                    {0,0,0,0},
-                    {1,1,1,1},
-                    {0,0,0,0},
-                    {0,0,0,0}
+                    {0,1,0,0},
+                    {0,1,0,0},
+                    {0,1,0,0},
+                    {0,1,0,0}
                 };
 
             }
@@ -44,9 +44,9 @@ namespace Tetris
                 MatrixHeight = 3;
                 Matrix = new int[3, 3]
                 {
-                    {0,0,2},
-                    {2,2,2},
-                    {0,0,0}
+                    {0,2,0},
+                    {0,2,0},
+                    {2,2,0}
                 };
             }
             else if (shapeNumber == 3)
@@ -55,9 +55,9 @@ namespace Tetris
                 MatrixHeight = 3;
                 Matrix = new int[3, 3]
                 {
-                    {3,0,0},
-                    {3,3,3},
-                    {0,0,0}
+                    {3,3,0},
+                    {0,3,0},
+                    {0,3,0}
                 };
             }
             else if (shapeNumber == 4)
@@ -67,8 +67,8 @@ namespace Tetris
                 Matrix = new int[3, 3]
                 {
                     {0,4,0},
-                    {4,4,4},
-                    {0,0,0}
+                    {4,4,0},
+                    {0,4,0}
                 };
             }
             else if (shapeNumber == 5)
@@ -77,9 +77,9 @@ namespace Tetris
                 MatrixHeight = 3;
                 Matrix = new int[3, 3]
                 {
-                    {0,5,5},
+                    {0,5,0},
                     {5,5,0},
-                    {0,0,0}
+                    {5,0,0}
                 };
             }
             else if (shapeNumber == 6)
@@ -88,9 +88,9 @@ namespace Tetris
                 MatrixHeight = 3;
                 Matrix = new int[3, 3]
                 {
+                    {6,0,0},
                     {6,6,0},
-                    {0,6,6},
-                    {0,0,0}
+                    {0,6,0}
                 };
             }
             else if (shapeNumber == 7)
