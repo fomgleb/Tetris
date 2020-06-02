@@ -97,8 +97,13 @@ namespace Tetris
                         if (x + 1 * dir > matrixWidth - 1 || x + 1 * dir < 0) // если фигура соприкосается с концом карты
                             return true;
 
-                        if (matrix[x + 1 * dir, y] != 0) // если фигура соприкосается с другой фигурой справа или слева
-                            if (x - currentShape.X + 1 * dir >= currentShape.MatrixWidth - 1 || currentShape.Matrix[x - currentShape.X + 1, y - currentShape.Y] == 0)
+                        if (matrix[x + 1 * dir, y] != 0) // если блоки фигуры соприкасаются с другими блоками справа или слева
+                            if (x - currentShape.X + 1 * dir >= currentShape.MatrixWidth - 1 || x - currentShape.X - 1 * dir < 0) // если проверяемый блок не выходит за рамки матрицы фигуры
+                            {
+                                if (currentShape.Matrix[x - currentShape.X + 1 * dir, y - currentShape.Y] == 0) // если проверяемый блок летящей фигуры не есть самим блоком летящей фигуры
+                                    return true;
+                            }
+                            else
                                 return true;
                     }
             return false;
@@ -128,22 +133,28 @@ namespace Tetris
             {
                 for (int x = 0; x < matrixWidth; x++)
                 {
-                    if (matrix[x, y] == 0)
-                    {
-                        fullRow = false;
+                    if (matrix[x, y] == 0) // если этот блок равняется нулю, то переходим к следующему ряду, так как в этом уже не будет полностью заполненого ряда
                         break;
+                    else if(x == matrixWidth - 1)
+                    {
+                        for (x = 0; x < matrixWidth; x++)
+                        {
+                            matrix[x, y] = 0;
+                        }
                     }
-                    else
-                        fullRow = true;
+
+
                 }
 
-                if (fullRow == true)
-                {
-                    for (int k = 0; k < matrixWidth; k++)
-                        matrix[k, y - 1] = 0;
-                }
-                else
-                    saveMatrixHeight = y;
+                
+
+                //if (fullRow == true)
+                //{
+                //    for (int k = 0; k < matrixWidth; k++)
+                //        matrix[k, saveMatrixHeight] = 0;
+                //}
+                //else
+                //    saveMatrixHeight = y;
             }
         }
 
