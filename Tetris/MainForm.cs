@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Drawing;
+using System.Globalization;
 using System.Windows.Forms;
 
 namespace Tetris
 {
     public partial class MainForm : Form
     {
-        const int blockSize = 25, matrixHeight = 20, matrixWidth = 10; // Размер одной клетки, ширина карты, высота карты
-        public int[,] matrix = new int[matrixWidth, matrixHeight]; // массив циферок, это сама карта
-        Shape currentShape = new Shape(6, 0, new Random().Next(1, 8)); // текущая фигура
+        int blockSize = 25; // размер одного блока на карте в пикселях
+
+        const int matrixHeight = 20, matrixWidth = 10; // ширина матрицы, высота матрицы
+        public int[,] matrix = new int[matrixWidth, matrixHeight]; // массив циферок, это матрица.
+        Shape currentShape = new Shape(4, 0, new Random().Next(1, 8)); // текущая фигура
 
         public MainForm()
         {
@@ -143,12 +146,15 @@ namespace Tetris
                         for ( y -= 1; y > -1; y--) // опускаем все блоки над обнуленым рядом на 1
                             for ( x = 0; x < matrixWidth; x++)
                                 matrix[x, y + 1] = matrix[x, y];
+
+                        removedRowsLabel.Text = Convert.ToString(Convert.ToInt32(removedRowsLabel.Text) + 1);
+                        scoreLabel.Text = Convert.ToString(Convert.ToInt32(scoreLabel.Text) + 50);
                     }
                 }
             }
         }
 
-        private void Form1_KeyDown(object sender, KeyEventArgs e) // реагирует на нажатия клавиш
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
             RemoveShape();
 
@@ -184,7 +190,7 @@ namespace Tetris
             Invalidate();
         }
 
-        private void Form1_Paint(object sender, PaintEventArgs e)  
+        private void MainForm_Paint(object sender, PaintEventArgs e)
         {
             DrawGrid(e.Graphics);
             DrawMap(e.Graphics);
@@ -194,7 +200,24 @@ namespace Tetris
         {
             if (VerticalCollide())
             {
-                currentShape = new Shape(4, 0, new Random().Next(1,8));
+                if (currentShape.Y <= 0)
+                {
+                    timer.Stop();
+
+                    ClearMatrix();
+
+                    MessageBox.Show($"Your score {scoreLabel.Text}", "Message", MessageBoxButtons.OK);
+
+                    scoreLabel.Text = "0";
+                    removedRowsLabel.Text = "0";
+
+                    timer.Start();
+                }
+                else
+                {
+                    currentShape = new Shape(4, 0, new Random().Next(1, 8));
+                    scoreLabel.Text = Convert.ToString(Convert.ToInt32(scoreLabel.Text) + 5); // +5 к очкам
+                }
             }
             else
             {
@@ -204,7 +227,14 @@ namespace Tetris
 
             DeleteFullRow();
             Merge(); // переноси уже опущеную на один блок фигуру
-            Invalidate(); // вызывает перерисовку
+            Invalidate(); 
+        }
+
+        private void ClearMatrix()
+        {
+            for (int x = 0; x < matrixWidth; x++)
+                for (int y = 0; y < matrixHeight; y++)
+                    matrix[x, y] = 0;
         }
     }
 }
