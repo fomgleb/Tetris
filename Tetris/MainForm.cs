@@ -12,10 +12,13 @@ namespace Tetris
         const int matrixHeight = 20, matrixWidth = 10; // ширина матрицы, высота матрицы
         public int[,] matrix = new int[matrixWidth, matrixHeight]; // массив циферок, это матрица.
         Shape currentShape = new Shape(4, 0, new Random().Next(1, 8)); // текущая фигура
+        Shape nextShape;
 
         public MainForm()
         {
             InitializeComponent();
+
+            nextShape = new Shape(4, 0, new Random().Next(1, 8)); // слудующая фигура
 
             Merge();
             Invalidate(); // вызывает перерисовку формы, и поле этого вызывается Form1_Paint
@@ -32,7 +35,7 @@ namespace Tetris
                 graphics.DrawLine(Pens.Black, new Point(50 + i * blockSize, 50), new Point(50 + i * blockSize, 50 + matrixHeight * blockSize)); // рисует вертикальные линии
         }
 
-        private void DrawMap(Graphics graphics)// Рисует карту
+        private void DrawMap(Graphics graphics)// рисует карту
         {
             for (int x = 0; x < matrixWidth; x++)
                 for (int y = 0; y < matrixHeight; y++)
@@ -41,18 +44,58 @@ namespace Tetris
                         graphics.FillRectangle(Brushes.Red, 50 + x * blockSize + 2, 50 + y * blockSize + 2, blockSize - 2, blockSize - 2);
                     else if (matrix[x, y] == 2)
                         graphics.FillRectangle(Brushes.Blue, 50 + x * blockSize + 2, 50 + y * blockSize + 2, blockSize - 2, blockSize - 2);
-                    else if (matrix[x, y] == 2)
-                        graphics.FillRectangle(Brushes.Orange, 50 + x * blockSize + 2, 50 + y * blockSize + 2, blockSize - 2, blockSize - 2);
                     else if (matrix[x, y] == 3)
-                        graphics.FillRectangle(Brushes.Brown, 50 + x * blockSize + 2, 50 + y * blockSize + 2, blockSize - 2, blockSize - 2);
+                        graphics.FillRectangle(Brushes.Orange, 50 + x * blockSize + 2, 50 + y * blockSize + 2, blockSize - 2, blockSize - 2);
                     else if (matrix[x, y] == 4)
-                        graphics.FillRectangle(Brushes.Green, 50 + x * blockSize + 2, 50 + y * blockSize + 2, blockSize - 2, blockSize - 2);
+                        graphics.FillRectangle(Brushes.Brown, 50 + x * blockSize + 2, 50 + y * blockSize + 2, blockSize - 2, blockSize - 2);
                     else if (matrix[x, y] == 5)
-                        graphics.FillRectangle(Brushes.Purple, 50 + x * blockSize + 2, 50 + y * blockSize + 2, blockSize - 2, blockSize - 2);
+                        graphics.FillRectangle(Brushes.Green, 50 + x * blockSize + 2, 50 + y * blockSize + 2, blockSize - 2, blockSize - 2);
                     else if (matrix[x, y] == 6)
-                        graphics.FillRectangle(Brushes.Black, 50 + x * blockSize + 2, 50 + y * blockSize + 2, blockSize - 2, blockSize - 2);
+                        graphics.FillRectangle(Brushes.Purple, 50 + x * blockSize + 2, 50 + y * blockSize + 2, blockSize - 2, blockSize - 2);
                     else if (matrix[x, y] == 7)
                         graphics.FillRectangle(Brushes.Violet, 50 + x * blockSize + 2, 50 + y * blockSize + 2, blockSize - 2, blockSize - 2);
+                }
+        }
+
+        private void DrawNextShape(Graphics graphics)
+        {
+            int leftMargin = 420, topMargin = 100;
+
+            
+
+            for (int x = 0; x < nextShape.MatrixWidth; x++)
+                for (int y = 0; y < nextShape.MatrixHeight; y++)
+                {
+                    for (int i = 0; i <= 4; i++)
+                        graphics.DrawLine(Pens.Black, new Point(leftMargin + i * blockSize, topMargin), new Point(leftMargin + i * blockSize, topMargin + 4 * blockSize)); // рисует вертикальные линии
+                    for (int i = 0; i <= 4; i++)
+                        graphics.DrawLine(Pens.Black, new Point(leftMargin, topMargin + i * blockSize), new Point(leftMargin + 4 * blockSize, topMargin + i * blockSize)); // рисует горизонтальные линии
+
+                    switch (nextShape.Matrix[x, y])
+                    {
+                        case 1:
+                            graphics.FillRectangle(Brushes.Red, leftMargin + x * blockSize + 2, topMargin + y * blockSize + 2, blockSize - 2, blockSize - 2);
+                            break;
+                        case 2:
+                            graphics.FillRectangle(Brushes.Blue, leftMargin + x * blockSize + 2, topMargin + y * blockSize + 2, blockSize - 2, blockSize - 2);
+                            break;
+                        case 3:
+                            graphics.FillRectangle(Brushes.Orange, leftMargin + x * blockSize + 2, topMargin + y * blockSize + 2, blockSize - 2, blockSize - 2);
+                            break;
+                        case 4:
+                            graphics.FillRectangle(Brushes.Brown, leftMargin + x * blockSize + 2, topMargin + y * blockSize + 2, blockSize - 2, blockSize - 2);
+                            break;
+                        case 5:
+                            graphics.FillRectangle(Brushes.Green, leftMargin + x * blockSize + 2, topMargin + y * blockSize + 2, blockSize - 2, blockSize - 2);
+                            break;
+                        case 6:
+                            graphics.FillRectangle(Brushes.Purple, leftMargin + x * blockSize + 2, topMargin + y * blockSize + 2, blockSize - 2, blockSize - 2);
+                            break;
+                        case 7:
+                            graphics.FillRectangle(Brushes.Violet, leftMargin + x * blockSize + 2, topMargin + y * blockSize + 2, blockSize - 2, blockSize - 2);
+                            break;
+                    }
+                    
                 }
         }
 
@@ -194,13 +237,15 @@ namespace Tetris
         {
             DrawGrid(e.Graphics);
             DrawMap(e.Graphics);
+            DrawNextShape(e.Graphics);
         }
 
         private void timer_Tick(object sender, EventArgs e) // происходит при тике таймера
         {
             if (VerticalCollide())
             {
-                if (currentShape.Y <= 0)
+                currentShape = new Shape(4, 0, nextShape.ShapeNumber);
+                if (Overlay(currentShape))
                 {
                     timer.Stop();
 
@@ -214,10 +259,9 @@ namespace Tetris
                     timer.Start();
                 }
                 else
-                {
-                    currentShape = new Shape(4, 0, new Random().Next(1, 8));
                     scoreLabel.Text = Convert.ToString(Convert.ToInt32(scoreLabel.Text) + 5); // +5 к очкам
-                }
+
+                nextShape = new Shape(4, 0, new Random().Next(1, 8));
             }
             else
             {

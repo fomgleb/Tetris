@@ -107,30 +107,6 @@ namespace Tetris
 
         public void Rotate()
         {
-            //switch (ShapeNumber)
-            //{
-            //    case 1:
-            //        ShapeNumber = 101;
-            //        Matrix = new int[4, 4]
-            //        {
-            //            {0,1,0,0},
-            //            {0,1,0,0},
-            //            {0,1,0,0},
-            //            {0,1,0,0}
-            //        };
-            //        break;
-            //    case 101:
-            //        ShapeNumber = 1;
-            //        Matrix = new int[4, 4]
-            //        {
-            //            {0,0,0,0},
-            //            {1,1,1,1},
-            //            {0,0,0,0},
-            //            {0,0,0,0}
-            //        };
-            //        break;
-            //}
-
             int[,] tempMatrix = new int[MatrixWidth, MatrixHeight];
             for (int i = 0; i < MatrixWidth; i++)
                 for (int j = 0; j < MatrixHeight; j++)
@@ -138,8 +114,6 @@ namespace Tetris
                     tempMatrix[i, j] = Matrix[j, MatrixHeight - 1 - i];
                 }
             Matrix = tempMatrix;
-
-            
         }
 
         public void MoveDown()
