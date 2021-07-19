@@ -228,33 +228,22 @@ namespace Tetris
         {
             RemoveShape();
 
-            switch (e.KeyCode)
+            if (e.KeyCode.ToString() == Properties.Settings.Default.rightButton && !HorizontalCollide(1))
+                currentShape.MoveRight();
+            else if (e.KeyCode.ToString() == Properties.Settings.Default.leftButton && !HorizontalCollide(-1))
+                currentShape.MoveLeft();
+            else if (e.KeyCode.ToString() == Properties.Settings.Default.downButton && !VerticalCollide())
+                currentShape.MoveDown();
+            else if (e.KeyCode.ToString() == Properties.Settings.Default.rotateButton)
             {
-                case Keys.Right:
-                    if (!HorizontalCollide(1))
-                        currentShape.MoveRight();
-                    break;
+                RemoveShape();
+                Shape tempShape = new Shape(currentShape.X, currentShape.Y, currentShape.ShapeNumber);
 
-                case Keys.Left:
-                    if (!HorizontalCollide(-1))
-                        currentShape.MoveLeft();
-                    break;
+                tempShape.Matrix = currentShape.Matrix;
+                tempShape.Rotate();
 
-                case Keys.Down:
-                    if (!VerticalCollide())
-                        currentShape.MoveDown();
-                    break;
-
-                case Keys.Up:
-                    RemoveShape();
-                    Shape tempShape = new Shape(currentShape.X, currentShape.Y, currentShape.ShapeNumber);
-
-                    tempShape.Matrix = currentShape.Matrix;
-                    tempShape.Rotate();
-
-                    if (!Overlay(tempShape))
-                        currentShape.Rotate();
-                    break;
+                if (!Overlay(tempShape))
+                    currentShape.Rotate();
             }
             Merge();
             Invalidate();
@@ -302,8 +291,20 @@ namespace Tetris
 
                     timer.Start();
                     break;
+
+                case "changeControlsItem":
+                    timer.Stop();
+
+                    ChangeControlsForm changeControlsForm = new ChangeControlsForm();
+                    changeControlsForm.ShowDialog();
+
+
+                    timer.Start();
+                    break;
             }
         }
+
+        
 
         private void timer_Tick(object sender, EventArgs e) // происходит при тике таймера
         {

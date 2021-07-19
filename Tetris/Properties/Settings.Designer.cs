@@ -34,5 +34,53 @@ namespace Tetris.Properties {
                 this["recordScore"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Right")]
+        public string rightButton {
+            get {
+                return ((string)(this["rightButton"]));
+            }
+            set {
+                this["rightButton"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Left")]
+        public string leftButton {
+            get {
+                return ((string)(this["leftButton"]));
+            }
+            set {
+                this["leftButton"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Down")]
+        public string downButton {
+            get {
+                return ((string)(this["downButton"]));
+            }
+            set {
+                this["downButton"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Up")]
+        public string rotateButton {
+            get {
+                return ((string)(this["rotateButton"]));
+            }
+            set {
+                this["rotateButton"] = value;
+            }
+        }
     }
 }

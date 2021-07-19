@@ -5,5 +5,17 @@
     <Setting Name="recordScore" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
+    <Setting Name="rightButton" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Right</Value>
+    </Setting>
+    <Setting Name="leftButton" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Left</Value>
+    </Setting>
+    <Setting Name="downButton" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Down</Value>
+    </Setting>
+    <Setting Name="rotateButton" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Up</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
